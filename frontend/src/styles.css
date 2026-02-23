@@ -8,7 +8,7 @@ body {
 .screen {
   padding: 16px;
   max-width: 420px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
 }
 .card {
   background: white;
@@ -22,7 +22,7 @@ label {
   margin-bottom: 10px;
   font-size: 16px;
 }
-input, button {
+input, button, select {
   font-size: 18px;
   padding: 10px;
   border-radius: 8px;
@@ -56,7 +56,51 @@ button {
   display: flex;
   justify-content: space-between;
   margin: 8px 0;
+  gap: 8px;
 }
 .error {
   color: #b91c1c;
+}
+.success {
+  color: #166534;
+}
+.tabs {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: white;
+  border-top: 1px solid #ddd;
+}
+.tabs a {
+  text-align: center;
+  padding: 10px 4px;
+  text-decoration: none;
+  color: #334155;
+  font-size: 14px;
+}
+.tabs a.active {
+  color: #0d9488;
+  font-weight: bold;
+}
+.sale-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.qty-controls button {
+  width: 40px;
+  padding: 8px;
+}
+.danger {
+  width: 100%;
+  background: #fee2e2;
+  color: #991b1b;
 }

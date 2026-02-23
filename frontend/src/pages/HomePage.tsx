@@ -14,14 +14,22 @@ type CartItem = {
   qty: number;
 };
 
+function generateClientSaleId() {
+  return crypto.randomUUID();
+}
+
 export function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [message, setMessage] = useState('');
+
+  async function loadProducts() {
+    const data = await api<Product[]>('/products');
+    setProducts(data);
+  }
 
   useEffect(() => {
-    api<Product[]>('/products')
-      .then(setProducts)
-      .catch(() => setProducts([]));
+    loadProducts().catch(() => setProducts([]));
   }, []);
 
   const total = useMemo(
@@ -41,10 +49,35 @@ export function HomePage() {
     });
   }
 
+  function updateQty(productId: string, delta: number) {
+    setCart((prev) =>
+      prev
+        .map((item) => (item.product.id === productId ? { ...item, qty: item.qty + delta } : item))
+        .filter((item) => item.qty > 0)
+    );
+  }
+
+  async function saveSale() {
+    if (!cart.length) return;
+
+    await api('/sales', {
+      method: 'POST',
+      body: JSON.stringify({
+        clientSaleId: generateClientSaleId(),
+        items: cart.map((item) => ({ productId: item.product.id, quantity: item.qty, packApplied: false }))
+      })
+    });
+
+    setCart([]);
+    setMessage('Venta guardada correctamente');
+    await loadProducts();
+  }
+
   return (
     <main className="screen">
       <div className="connection online">Conectado</div>
       <h2>Anotar venta</h2>
+      {message ? <p className="success">{message}</p> : null}
       <section className="card">
         <h3>Productos frecuentes</h3>
         <div className="grid">
@@ -60,17 +93,35 @@ export function HomePage() {
       </section>
 
       <section className="card">
+        <h3>Otros productos</h3>
+        <div className="grid">
+          {products
+            .filter((p) => !p.isFrequent)
+            .slice(0, 6)
+            .map((product) => (
+              <button key={product.id} onClick={() => addProduct(product)}>
+                {product.name}
+              </button>
+            ))}
+        </div>
+      </section>
+
+      <section className="card">
         <h3>Carrito actual</h3>
         {cart.length === 0 ? <p>Sin productos</p> : null}
         {cart.map((item) => (
-          <div key={item.product.id} className="cart-row">
+          <div key={item.product.id} className="sale-row">
             <span>{item.product.name}</span>
-            <strong>x{item.qty}</strong>
+            <div className="qty-controls">
+              <button onClick={() => updateQty(item.product.id, -1)}>-</button>
+              <strong>{item.qty}</strong>
+              <button onClick={() => updateQty(item.product.id, 1)}>+</button>
+            </div>
           </div>
         ))}
         <p>Total: S/ {total.toFixed(2)}</p>
-        <button className="primary" disabled>
-          Guardar venta (próximo paso)
+        <button className="primary" onClick={saveSale} disabled={!cart.length}>
+          Guardar venta
         </button>
       </section>
     </main>

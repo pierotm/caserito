@@ -9,7 +9,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
-    "create-store-user": "tsx src/scripts/create-store-user.ts"
+    "create-store-user": "tsx src/scripts/create-store-user.ts",
+    "create-demo-data": "tsx src/scripts/create-demo-data.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",

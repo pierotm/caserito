@@ -64,6 +64,21 @@ npm run create-store-user -w backend -- --store="Puesto Doña Rosa" --email=duen
 
 Salida esperada: imprime `store_id`, `email` y `password temporal`.
 
+## Cuenta demo lista para probar todas las vistas
+
+1. Ejecuta migraciones.
+2. Carga datos demo:
+
+```bash
+npm run create-demo-data -w backend
+```
+
+Credenciales demo:
+- **Email:** `demo@caserito.pe`
+- **Password:** `Demo12345!`
+
+Este script crea tienda demo, productos (UNIDAD/KG, incluyendo paquete), y ventas (completadas + anulada) para que puedas revisar Home, Productos, Reportes y Ajustes.
+
 ## Endpoints MVP implementados
 
 ### Auth
