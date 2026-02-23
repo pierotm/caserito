@@ -56,6 +56,30 @@ npm run prisma:migrate -w backend
 npm run dev
 ```
 
+## Si te aparece "Missing environment variable: DATABASE_URL"
+
+Ese error sale cuando todavía no existe `backend/.env`.
+
+1. Crea el archivo desde el ejemplo:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+En PowerShell:
+
+```powershell
+Copy-Item backend/.env.example backend/.env
+```
+
+2. Levanta PostgreSQL y valida que `DATABASE_URL` apunte a tu base.
+3. Recién ahí ejecuta:
+
+```bash
+npm run prisma:migrate -w backend
+npm run create-demo-data -w backend
+```
+
 ## Script de creación manual de tienda + owner
 
 ```bash
